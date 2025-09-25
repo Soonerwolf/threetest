@@ -1,0 +1,19 @@
+{
+  "name": "threetest",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest",
+    "vite": "^7.1.7"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "three": "^0.180.0"
+  },
+  "scripts": {
+    "start": "bun run index.html"
+  }
+}

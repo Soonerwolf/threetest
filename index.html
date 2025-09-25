@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ThreeJS testing</title>
+    </head>
+    <body>
+        <div id="glContainer" style="width:700px; height:500px; background-color: #888888"></div>
+        <script type="module" src="./src/SimpleTestCode.js"></script>
+        <script type="module">
+            // import { SimpleTest } from "./src/SimpleTestClass.js";
+            window.onload = function () {
+                let c = document.getElementById("glContainer");
+                simpleTest(c);
+                // let test = new SimpleTest(c);
+                // test.draw();
+            }
+        </script>
+    </body>
+</html>
