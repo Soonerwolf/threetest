@@ -6,16 +6,6 @@
     <body>
         <div id="glContainer" style="width:700px; height:500px; background-color: #888888"></div>
         
-        <!-- This produces Bun Runtime Error "ReferenceError: simpleTest is not defined" -->
-        <!-- <script type="module" src="./src/SimpleTestCode.js"></script>
-        <script>
-            window.onload = function () {
-                let c = document.getElementById("glContainer");
-                simpleTest(c);
-            }
-        </script> -->
-
-        <!-- This produces console error "Loading module from “http://localhost:3000/src/SimpleTestCode.js” was blocked because of a disallowed MIME type (“text/html”)" -->
         <script type="module">
             import { ThreeTest } from "./src/ThreeTestClass.js";
             window.onload = function () {
