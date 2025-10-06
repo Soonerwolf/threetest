@@ -20,8 +20,8 @@ export class ThreeTest
         imgTexture.colorSpace = THREE.SRGBColorSpace;
 
         const imgMaterial = new THREE.MeshBasicMaterial({/*color: 0xff0000*/ map: imgTexture});
-        this.mesh = new THREE.Mesh( geometry, imgMaterial);
-        this.scene.add(this.mesh);
+        const mesh = new THREE.Mesh( geometry, imgMaterial);
+        this.scene.add(mesh);
     }
 
     draw ()
