@@ -5,12 +5,14 @@
   "private": true,
   "devDependencies": {
     "@types/bun": "latest",
-    "vite": "^7.1.7"
+    "eslint": "^9.37.0",
+    "vite": "^7.1.8"
   },
   "peerDependencies": {
-    "typescript": "^5"
+    "typescript": "^5.9.2"
   },
   "dependencies": {
+    "NexradLevel3Parser": "git+ssh://git@git.mesonet.us/www/libs/NexradLevel3Parser.git#version/3.x",
     "three": "^0.180.0"
   },
   "scripts": {

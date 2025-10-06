@@ -5,13 +5,21 @@
     </head>
     <body>
         <div id="glContainer" style="width:700px; height:500px; background-color: #888888"></div>
-        
+        <div id="testContainer">Awaiting radTest</div>
         <script type="module">
             import { ThreeTest } from "./src/ThreeTestClass.js";
+            import { RadialTest } from "./src/RadialTest.js";
+
             window.onload = function () {
-                let c = document.getElementById("glContainer");
-                let test = new ThreeTest(c);
+                const c = document.getElementById("glContainer");
+                const test = new ThreeTest(c);
                 test.draw();
+
+                // const testC = document.getElementById("testContainer");
+                // const radTest = new RadialTest(testC);
+                // const fileUrl = new URL("https://content-legacy.prod.mesonet.org//people/brad/dev/202304010417N0B_KNQA.nids");
+    
+                // radTest.initFromUrl(fileUrl);
             }
         </script>
         

@@ -9,16 +9,24 @@ export class ThreeTest
         inContainer.appendChild(this.renderer.domElement);
 
         this.scene = new THREE.Scene();
+
         this.camera = new THREE.PerspectiveCamera(45, inContainer.offsetWidth / inContainer.offsetHeight, 1, 4000);
         this.camera.position.set(0,0,3.333);
 
-        let geometry = new THREE.PlaneGeometry(1,1);
-        var mesh = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial({color: 0xff0000}));
-        this.scene.add(mesh);
+        const geometry = new THREE.PlaneGeometry(1,1);
+
+        const imgLoader = new THREE.TextureLoader();
+        const imgTexture = imgLoader.load('https://sdg.mesonet.org/people/brad/images/radialTest2.png');
+        imgTexture.colorSpace = THREE.SRGBColorSpace;
+
+        const imgMaterial = new THREE.MeshBasicMaterial({/*color: 0xff0000*/ map: imgTexture});
+        this.mesh = new THREE.Mesh( geometry, imgMaterial);
+        this.scene.add(this.mesh);
     }
 
     draw ()
     {
+        this.renderer.render(this.scene, this.camera);
         this.renderer.render(this.scene, this.camera);
     }
 }
