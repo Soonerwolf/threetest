@@ -83,7 +83,7 @@ export class ThreeTest
         let vertPoints = [];
         let indices = [];
         let indexCenter = 0, indexLeft = 1, indexRight = 2;
-        let i = 1;
+        let i = 0;
         while (i < inNumRadials)
         {
             vertPoints.push(0.0);

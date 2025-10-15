@@ -30,7 +30,7 @@ const fragmentSource = `
 
         if (dist <= 1.0)
         {
-            float angle = atan(delta.x, -delta.y);
+            float angle = atan(delta.x, delta.y);
             float angleDeg = degrees(angle);
             if (angleDeg < 0.0) angleDeg += 360.0;
             float angleFrac = angleDeg / 360.0;
