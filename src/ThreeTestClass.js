@@ -5,6 +5,11 @@ export class ThreeTest
 {
     constructor(inContainer)
     {
+        this.texture = null;
+        this.geometry = null;
+        this.material = null;
+        this.mesh = null;
+        
         this.renderer = new THREE.WebGLRenderer();
         this.renderer.setPixelRatio(inContainer.devicePixelRatio);
         this.renderer.setSize(inContainer.offsetWidth, inContainer.offsetHeight);
@@ -16,15 +21,61 @@ export class ThreeTest
         this.camera = new THREE.PerspectiveCamera(45, inContainer.offsetWidth / inContainer.offsetHeight, 1, 4000);
         this.camera.position.set(0,0,3.333);
 
+        this.needsRedraw = true;
+    }
+
+    reset ()
+    {
+        if (this.mesh) this.mesh.dispose();
+        if (this.material) this.material.dispose();
+        if (this.texture) this.texture.dispose();
+        if (this.geometry) this.geometry.dispose();
+    }
+
+
+    setDataSource(inUrl)
+    {
+        console.log('setDataSource');
+        this.reset();
+
+        this.dataUrl = inUrl;
+        let loadCallback = function(inTexture) {
+            this.texture = inTexture;
+            this.geometry = this.createRadialGeometry (360, 1.3);
+
+            // const wireframe = new THREE.WireframeGeometry(geometry);
+            // const lines = new THREE.LineSegments(wireframe);
+
+            this.material = new THREE.ShaderMaterial(
+                {
+                    vertexShader: vertexSource,
+                    fragmentShader: fragmentSource,
+                    uniforms: {
+                        //u_color: { value: new THREE.Color(0xFF0000)}
+                        uRadius: {value: 1.3},
+                        uTexture: { value: this.texture }
+                    }
+                }
+            );
+
+            this.mesh = new THREE.Mesh( this.geometry, this.material);
+            this.scene.add(this.mesh);
+
+            this.needsRedraw = true;
+            this.draw();
+        }.bind(this);
+
+        const imgLoader = new THREE.TextureLoader();
+        this.texture = imgLoader.load(
+            this.dataUrl,
+            loadCallback,
+            undefined,
+            function (err) {console.log(err)}
+        );
+       
         //const geometry = this.createPlaneGeometry(2,1.3);
-        const geometry = this.createRadialGeometry (360, 1.3);
-
-        // const wireframe = new THREE.WireframeGeometry(geometry);
-        // const lines = new THREE.LineSegments(wireframe);
-        const material = this.createThreeBasicShader();
-        const mesh = new THREE.Mesh( geometry, material);
-
-        this.scene.add(mesh);
+        
+        console.log('setDataSource EXIT');
     }
 
 
@@ -69,20 +120,14 @@ export class ThreeTest
         const deg2rad = Math.PI / 180.0;
         const radius = inRange;
         
-        let radialValue = 0.0;
-        let texLeft = radialValue / 360.0;
-        
+        let radialValue = 0; // set to starting radial value?
         let radianValue = deg2rad * (radialValue - 270.0);
+        
         let vertLeftY = radius * Math.sin(radianValue);
         let vertLeftX = radius * Math.cos(radianValue);
 
-        const texTop = 1.0;
-        const texBottom = 0.0;
-
-        let texPoints = []
         let vertPoints = [];
-        let indices = [];
-        let indexCenter = 0, indexLeft = 1, indexRight = 2;
+        
         let i = 0;
         while (i < inNumRadials)
         {
@@ -90,19 +135,10 @@ export class ThreeTest
             vertPoints.push(0.0);
             vertPoints.push(0.0);
 
-            indices.push(indexCenter);
-
             vertPoints.push(vertLeftX);
             vertPoints.push(vertLeftY);
             vertPoints.push(0.0);
-            indices.push(indexLeft++);
-            
-            // Left side texture coordinates
-            texPoints.push (texLeft);
-            texPoints.push (texBottom);
-            texPoints.push(texLeft);
-            texPoints.push(texTop);
-            
+        
             // Calculate the right side vertex coords
             radialValue += 1.0;
             radianValue = deg2rad * (radialValue -270.0);
@@ -114,17 +150,9 @@ export class ThreeTest
             vertPoints.push(vertRightY);
             vertPoints.push(0.0);
 
-            indices.push(indexRight++);
-            if (indexRight == 360) indexRight = 0;
-
-            let texRight = radialValue / 360.0;
-            texPoints.push(texRight);
-            texPoints.push(texTop);
-
             vertLeftX = vertRightX;
             vertLeftY = vertRightY;
-            texLeft = texRight;
-
+        
             i++;
         }
 
@@ -133,12 +161,11 @@ export class ThreeTest
         //outGeometry.setIndex(indices);
         
         const posAttribute = new THREE.Float32BufferAttribute(vertPoints, vertSize);
-        const uvAttribute = new THREE.Float32BufferAttribute(texPoints, 2);
         outGeometry.setAttribute('position', posAttribute);
-        outGeometry.setAttribute('uv', uvAttribute);
-
+        
         return outGeometry;
     }
+
 
     createThreeBasicMaterial ()
     {
@@ -147,10 +174,17 @@ export class ThreeTest
     }
 
 
-    createThreeBasicShader ()
+    createThreeShader ()
     {
         const imgLoader = new THREE.TextureLoader();
-        const imgTexture = imgLoader.load('https://sdg.mesonet.org/people/brad/images/radialTest2.png');
+        let assignFunc = function(inTexture) {this.texture = inTexture;}.bind(this);
+        imgLoader.load(
+            'https://sdg.mesonet.org/people/brad/images/radialTest2.png',
+            // onLoad callback
+            assignFunc,
+            undefined,
+            function(err) {console.log(err);}
+        );
         imgTexture.colorSpace = THREE.SRGBColorSpace;
 
         const outMaterial = new THREE.ShaderMaterial(
@@ -181,6 +215,11 @@ export class ThreeTest
 
     draw ()
     {
-        this.renderer.render(this.scene, this.camera);
+        if (this.needsRedraw)
+        {
+            console.log("Drawing...");
+            this.renderer.render(this.scene, this.camera);
+            this.needsRedraw = false;
+        }
     }
 }

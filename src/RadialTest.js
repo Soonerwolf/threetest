@@ -16,25 +16,7 @@ export class RadialTest
         this.mStatusContainer = inContainer;
     }
 
-    initFromUrlUsingWorker(inUrl)
-    {
-        this.mRadarUrl = inUrl;
-        const radWorker = new Worker(new URL("RadarWorker.js", import.meta.url));
-
-        radWorker.onmessage = function(workerMessage) {
-            console.log("Parse successful");
-            this.mRadarData = workerMessage.data;
-            // here is where we pepare everything for drawing.
-        }
-        radWorker.onerror = function(workerError) {
-            console.log(workerError.message);
-            this.mRadarData = {};
-        }
-        this.mStatusContainer.innerHTML = "Posting to worker"
-        radWorker.postMessage(inUrl);
-    }
-
-
+    
     async loadFromUrl (inUrl)
     {
         let outBuffer;

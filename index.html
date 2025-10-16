@@ -13,13 +13,14 @@
             window.onload = function () {
                 const c = document.getElementById("glContainer");
                 const test = new ThreeTest(c);
+                test.setDataSource('https://sdg.mesonet.org/people/brad/images/radialTest2.png')
                 test.draw();
 
-                // const testC = document.getElementById("testContainer");
-                // const radTest = new RadialTest(testC);
-                // const fileUrl = new URL("https://content-legacy.prod.mesonet.org//people/brad/dev/202304010417N0B_KNQA.nids");
+                const testC = document.getElementById("testContainer");
+                const radTest = new RadialTest(testC);
+                const fileUrl = new URL("https://content-legacy.prod.mesonet.org//people/brad/dev/202304010417N0B_KNQA.nids");
     
-                // radTest.initFromUrl(fileUrl);
+                radTest.initFromUrl(fileUrl);
             }
         </script>
         
