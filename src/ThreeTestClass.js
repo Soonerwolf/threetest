@@ -37,6 +37,8 @@ export class ThreeTest
     {
         console.log('setDataSource');
         this.reset();
+        const startAngle = 30.0;
+        const startRadian = THREE.MathUtils.degToRad(startAngle);
 
         this.dataUrl = inUrl;
         let loadCallback = function(inTexture) {
@@ -59,6 +61,7 @@ export class ThreeTest
             );
 
             this.mesh = new THREE.Mesh( this.geometry, this.material);
+            this.mesh.rotateZ(-startRadian);
             this.scene.add(this.mesh);
 
             this.needsRedraw = true;
