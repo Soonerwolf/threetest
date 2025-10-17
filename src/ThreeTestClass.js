@@ -33,43 +33,16 @@ export class ThreeTest
     }
 
 
-    setDataSource(inUrl)
+    setImageSource(inUrl)
     {
         console.log('setDataSource');
         this.reset();
-        const startAngle = 30.0;
-        const startRadian = THREE.MathUtils.degToRad(startAngle);
-
+        
         this.dataUrl = inUrl;
-        let loadCallback = function(inTexture) {
-            this.texture = inTexture;
-            this.geometry = this.createRadialGeometry (360, 1.3);
-
-            // const wireframe = new THREE.WireframeGeometry(geometry);
-            // const lines = new THREE.LineSegments(wireframe);
-
-            this.material = new THREE.ShaderMaterial(
-                {
-                    vertexShader: vertexSource,
-                    fragmentShader: fragmentSource,
-                    uniforms: {
-                        //u_color: { value: new THREE.Color(0xFF0000)}
-                        uRadius: {value: 1.3},
-                        uTexture: { value: this.texture }
-                    }
-                }
-            );
-
-            this.mesh = new THREE.Mesh( this.geometry, this.material);
-            this.mesh.rotateZ(-startRadian);
-            this.scene.add(this.mesh);
-
-            this.needsRedraw = true;
-            this.draw();
-        }.bind(this);
+        let loadCallback = this.setTexture.bind(this);
 
         const imgLoader = new THREE.TextureLoader();
-        this.texture = imgLoader.load(
+        imgLoader.load(
             this.dataUrl,
             loadCallback,
             undefined,
@@ -81,6 +54,37 @@ export class ThreeTest
         console.log('setDataSource EXIT');
     }
 
+
+    setTexture(inTexture)
+    {
+        const startAngle = 30.0;
+        const startRadian = THREE.MathUtils.degToRad(startAngle);
+
+        this.texture = inTexture;
+        this.geometry = this.createRadialGeometry (360, 1.3);
+
+        // const wireframe = new THREE.WireframeGeometry(geometry);
+        // const lines = new THREE.LineSegments(wireframe);
+
+        this.material = new THREE.ShaderMaterial(
+            {
+                vertexShader: vertexSource,
+                fragmentShader: fragmentSource,
+                uniforms: {
+                    //u_color: { value: new THREE.Color(0xFF0000)}
+                    uRadius: {value: 1.3},
+                    uTexture: { value: this.texture }
+                }
+            }
+        );
+
+        this.mesh = new THREE.Mesh( this.geometry, this.material);
+        this.mesh.rotateZ(-startRadian);
+        this.scene.add(this.mesh);
+
+        this.needsRedraw = true;
+        this.draw();
+    }
 
     createPlaneGeometry(inWidth, inHeight)
     {
@@ -169,52 +173,6 @@ export class ThreeTest
         return outGeometry;
     }
 
-
-    createThreeBasicMaterial ()
-    {
-        const colorMaterial = new THREE.MeshBasicMaterial({color: 0xff0000});
-        return colorMaterial;
-    }
-
-
-    createThreeShader ()
-    {
-        const imgLoader = new THREE.TextureLoader();
-        let assignFunc = function(inTexture) {this.texture = inTexture;}.bind(this);
-        imgLoader.load(
-            'https://sdg.mesonet.org/people/brad/images/radialTest2.png',
-            // onLoad callback
-            assignFunc,
-            undefined,
-            function(err) {console.log(err);}
-        );
-        imgTexture.colorSpace = THREE.SRGBColorSpace;
-
-        const outMaterial = new THREE.ShaderMaterial(
-            {
-                vertexShader: vertexSource,
-                fragmentShader: fragmentSource,
-                uniforms: {
-                    //u_color: { value: new THREE.Color(0xFF0000)}
-                    uRadius: {value: 1.3},
-                    uTexture: { value: imgTexture }
-                }
-            }
-        );
-        return outMaterial;
-    }
-
-
-
-    createThreeTextureMaterial ()
-    {
-        const imgLoader = new THREE.TextureLoader();
-        const imgTexture = imgLoader.load('https://sdg.mesonet.org/people/brad/images/radialTest2.png');
-        imgTexture.colorSpace = THREE.SRGBColorSpace;
-
-        const imgMaterial = new THREE.MeshBasicMaterial({map: imgTexture});
-        return imgMaterial;
-    }
 
     draw ()
     {
