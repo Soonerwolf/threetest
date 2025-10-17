@@ -26,7 +26,7 @@ const fragmentSource = `
         vec3 delta = vPosition;
         
         float dist = length(delta) / uRadius;
-        vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
+        vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
 
         if (dist <= 1.0)
         {
@@ -35,7 +35,7 @@ const fragmentSource = `
             if (angleDeg < 0.0) angleDeg += 360.0;
             float angleFrac = angleDeg / 360.0;
 //            color = vec4(0.0, angleFrac, 0.0, 1.0);
-            color = texture2D(uTexture, vec2(angleFrac, dist));
+            color = texture(uTexture, vec2(angleFrac, dist));
         }
         gl_FragColor = color;
     }`;

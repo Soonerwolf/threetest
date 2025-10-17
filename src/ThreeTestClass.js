@@ -26,10 +26,20 @@ export class ThreeTest
 
     reset ()
     {
-        if (this.mesh) this.mesh.dispose();
+
+        if (this.mesh)
+        {
+            this.mesh.removeFromParent();
+            this.mesh.dispose();
+            this.mesh = null;
+        }
+
         if (this.material) this.material.dispose();
+        this.material = null;
         if (this.texture) this.texture.dispose();
+        this.texture = null;
         if (this.geometry) this.geometry.dispose();
+        this.geometry = null;
     }
 
 
@@ -57,9 +67,6 @@ export class ThreeTest
 
     setTexture(inTexture)
     {
-        const startAngle = 30.0;
-        const startRadian = THREE.MathUtils.degToRad(startAngle);
-
         this.texture = inTexture;
         this.geometry = this.createRadialGeometry (360, 1.3);
 
@@ -79,6 +86,9 @@ export class ThreeTest
         );
 
         this.mesh = new THREE.Mesh( this.geometry, this.material);
+        
+        const startAngle = 70.0;
+        const startRadian = THREE.MathUtils.degToRad(startAngle);
         this.mesh.rotateZ(-startRadian);
         this.scene.add(this.mesh);
 
